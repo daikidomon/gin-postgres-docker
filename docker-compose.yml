@@ -1,0 +1,34 @@
+version: '3'
+services:
+  golang:
+    build: golang/.
+    tty: true
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      - PORT=${PORT}
+      - UPLOAD_DIR=${UPLOAD_DIR}
+    volumes:
+    - ./app/:/go/src/app
+    - ./data/:${UPLOAD_DIR}
+    command: go run main.go
+
+  postgres:
+    build: postgres/.
+    volumes:
+      - postgre-data
+      - ./sql:/docker-entrypoint-initdb.d
+    ports:
+      - ${POSTGRES_PORT}:5432
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS}
+    hostname: postgres
+    restart: always
+    user: root
+
+volumes:
+  postgre-data:
+
