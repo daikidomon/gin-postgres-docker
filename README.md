@@ -1,1 +1,1 @@
-# go-chat
+# gin-postgres-docker
